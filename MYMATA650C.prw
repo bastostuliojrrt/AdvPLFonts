@@ -9,15 +9,12 @@ escription)
    @author Túlio Bastos
    @since 25/05/2023
    @version 2.0
-   @see (https://tdn.totvs.com.br/pages/releaseview.action?pageId=612546305)
+   @param param_name, param_type, param_descr
+   @return lAuto
+   @example
+   (examples)
+   @see (links_or_references)
 /*/
-
-/*--------------------------------------------------------------------------------------------------------------*
- | P.E.:  M410MNU                                                                                               |
- | Desc:  Este fonte irá gerar uma solicitação de compra através do ExecAuto da rotina MATA650                  |
- |        (Ordem de Produção). Ele chama a tela de perguntas através do grupo de perguntas MTA651               |
- | Link:  http://tdn.totvs.com/pages/releaseview.action?pageId=6787737                                          |
- *--------------------------------------------------------------------------------------------------------------*/
 
 User Function MYMATA650C()
 Local aArea       := GetArea()
