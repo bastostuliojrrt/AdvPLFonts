@@ -18,12 +18,6 @@ User Function variaveis()
 
 Return 
 
-/*/{Protheus.doc} nomeStaticFunction
-  @type  Static Function
-  @author Tulio Bastos
-  @since 26/10/2023
-  @version 1.0
-/*/
 Static Function TESTE()
   
   //fwAlertInfo(cTexto) //-- Note que a variavel na function 'variaveis' continua mostrando que ela não está sendo utilizada devido ao escopo Local

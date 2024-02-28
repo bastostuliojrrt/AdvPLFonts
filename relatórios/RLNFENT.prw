@@ -1,6 +1,14 @@
 #INCLUDE 'Protheus.ch'
 #INCLUDE 'totvs.ch'
 
+
+/*/{Protheus.doc} RLNFENT
+Funcao usada para chamar as funcoes de montagem da query, criacao da parambox e geracao do relatorio em planilha
+@type user function
+@author Tulio Bastos
+@since 28/02/2024
+@version 1.0
+/*/
 User Function RLNFENT()
 
   Public pDtInicio    := ""
@@ -15,17 +23,11 @@ User Function RLNFENT()
 
 Return NIL
 
-/*/{Protheus.doc} Pergs
-  (long_description)
+/*/{Protheus.doc} Funcao usada para criar caixa de parametros
   @type  Static Function
-  @author user
+  @author Tulio Bastos
   @since 28/02/2024
-  @version version
-  @param param_name, param_type, param_descr
-  @return return_var, return_type, return_description
-  @example
-  (examples)
-  @see (links_or_references)
+  @version 1.0
 /*/
 Static Function xParambox()
 
@@ -58,6 +60,13 @@ Static Function xParambox()
   
 Return 
 
+/*/{Protheus.doc} MntQry
+  Funcao criada para realizar a montagem da query
+  @type  Static Function
+  @author Tulio Bastos
+  @since 28/02/2024
+  @version 1.0
+/*/
 Static Function MntQry()
 
   Local cQuery := ''
@@ -94,17 +103,12 @@ Static Function MntQry()
 Return
 
 
-/*/{Protheus.doc} nomeStaticFunction
-  (long_description)
+/*/{Protheus.doc} GeraExcel
+  Funcao usada para realizar a montagem do relatorio em planilha
   @type  Static Function
-  @author user
+  @author Tulio Bastos
   @since 28/02/2024
-  @version version
-  @param param_name, param_type, param_descr
-  @return return_var, return_type, return_description
-  @example
-  (examples)
-  @see (links_or_references)
+  @version 1.0
 /*/
 Static Function GeraExcel()
   
