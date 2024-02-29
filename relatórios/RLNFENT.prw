@@ -72,23 +72,28 @@ Static Function MntQry()
   Local cQuery := ''
 
   // Pega dados do banco
-  cQuery += "SELECT "
+  cQuery += "SELECT DISTINCT "
   cQuery += " F1_DOC, "
   cQuery += " F1_SERIE, " 
+  cQuery += " F1_TIPO, "
   cQuery += " F1_FORNECE, " 
   cQuery += " F1_LOJA, "
-  cQuery += " E2_NOMFOR, "
+  cQuery += " CASE WHEN F1_TIPO = 'N' THEN A2_NOME ELSE A1_NOME END 'NOME', "
   cQuery += " F1_EMISSAO, " 
   cQuery += " F1_DTDIGIT, "
   cQuery += " F1_VALMERC, "
+  cQuery += " F1_DUPL "
   cQuery += " E2_NATUREZ, "
-  cQuery += " ED_DESCRIC "
+  cQuery += " ED_DESCRIC, "
+  cQuery += " F1.D_E_L_E_T_ "
   cQuery += "FROM"
-  cQuery += " " + RetSQLName('SF1') + " "
-  cQuery += " INNER JOIN " + RetSQLName('SE2') + " ON F1_DOC = E2_NUM AND E2_FILIAL = '" + FWxFilial('SE2') + "'"
-  cQuery += " INNER JOIN " + RetSQLName('SED') + " ON E2_NATUREZ = ED_CODIGO "
+  cQuery += " " + RetSQLName('SF1') + " AS F1"
+  cQuery += " LEFT JOIN " + RetSQLName('SE2') + " AS E2 ON F1_DOC = E2_NUM AND F1_FORNECE = E2_FORNECE AND E2_FILIAL = '" + FWxFilial('SE2') + "'"
+  cQuery += " LEFT JOIN " + RetSQLName('SA1') + " AS A1 ON F1_FORNECE = A1_COD AND F1_LOJA = A1_LOJA "
+  cQuery += " LEFT JOIN " + RetSQLName('SA2') + " AS A2 ON F1_FORNECE = A2_COD AND F1_LOJA = A2_LOJA "
+  cQuery += " LEFT JOIN " + RetSQLName('SED') + " AS ED ON E2_NATUREZ = ED_CODIGO "
   cQuery += "WHERE F1_DTDIGIT "
-  cQuery += " BETWEEN " + "'" + pDtInicio + "'" + " AND " + "'" + pDtFim + "'"
+  cQuery += " BETWEEN " + "'" + pDtInicio + "'" + " AND " + "'" + pDtFim + "'" + " AND F1.D_E_L_E_T_ = ' '"
 
   cQuery := ChangeQuery(cQuery)
 
@@ -125,21 +130,22 @@ Static Function GeraExcel()
   oExcel:AddTable("NF", "Notas Fiscais de Entrada")
 
   // Adicionando colunas
-  oExcel:AddColumn("NF", "Notas Fiscais de Entrada", "Documento",2,1)
+  oExcel:AddColumn("NF", "Notas Fiscais de Entrada", "Documento",1,1)
   oExcel:AddColumn("NF", "Notas Fiscais de Entrada", "Serie",2,1)
-  oExcel:AddColumn("NF", "Notas Fiscais de Entrada", "Cod. Fornecedor",2,1)
-  oExcel:AddColumn("NF", "Notas Fiscais de Entrada", "Loja",2,1)
+  oExcel:AddColumn("NF", "Notas Fiscais de Entrada", "Tipo",2,1)
+  oExcel:AddColumn("NF", "Notas Fiscais de Entrada", "Cod. Fornecedor",1,1)
+  oExcel:AddColumn("NF", "Notas Fiscais de Entrada", "Loja",1,1)
   oExcel:AddColumn("NF", "Notas Fiscais de Entrada", "Razao Social",2,1)
   oExcel:AddColumn("NF", "Notas Fiscais de Entrada", "Dt. Emissao",2,4)
   oExcel:AddColumn("NF", "Notas Fiscais de Entrada", "Dt. Digitacao",2,4)
   oExcel:AddColumn("NF", "Notas Fiscais de Entrada", "Valor Total",2,3)
-  oExcel:AddColumn("NF", "Notas Fiscais de Entrada", "Cod. Natureza",2,1)
+  oExcel:AddColumn("NF", "Notas Fiscais de Entrada", "Cod. Natureza",1,1)
   oExcel:AddColumn("NF", "Notas Fiscais de Entrada", "Dsc. Natureza",2,1)
 
   While TR1->(!EoF())
 
     // Adicionando linhas
-    oExcel:AddRow("NF","Notas Fiscais de Entrada",{TR1->(F1_DOC),TR1->(F1_SERIE),TR1->(F1_FORNECE),TR1->(F1_LOJA),TR1->(E2_NOMFOR),SToD(TR1->(F1_EMISSAO)),SToD(TR1->(F1_DTDIGIT)),TR1->(F1_VALMERC),TR1->(E2_NATUREZ),TR1->(ED_DESCRIC)})
+    oExcel:AddRow("NF","Notas Fiscais de Entrada",{TR1->(F1_DOC),TR1->(F1_SERIE),TR1->(F1_TIPO),TR1->(F1_FORNECE),TR1->(F1_LOJA),TR1->NOME,SToD(TR1->(F1_EMISSAO)),SToD(TR1->(F1_DTDIGIT)),TR1->(F1_VALMERC),TR1->(F1_DUPL),TR1->(E2_NATUREZ),TR1->(ED_DESCRIC)})
 
     lOk := .T.
     TR1->(DBSkip())
