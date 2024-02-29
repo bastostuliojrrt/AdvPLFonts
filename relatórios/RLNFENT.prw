@@ -11,6 +11,7 @@ Funcao usada para chamar as funcoes de montagem da query, criacao da parambox e 
 /*/
 User Function RLNFENT()
 
+  Public cFilLog      := ""
   Public pDtInicio    := ""
   Public pDtFim       := ""
 
@@ -42,16 +43,18 @@ Static Function xParambox()
     // [7] - String contendo a validacao When
     // [8] - Tamanho do MsGet
     // [9] - Flag .T./.F. definide se a pergunta eh obrigatoria
+    aadd(aPergs, {1, "Filial", Space(6), "@!", "", "SM0", ".T.", 6,.T.})
     aadd(aPergs, {1, "Dt. Digit Ini", SToD(""), "", "", "", ".T.", 50, .T.})
     aadd(aPergs, {1, "Dt. Digit Fim", SToD(""), "", "", "", ".T.", 50, .T.})
 
     if Parambox(aPergs, "Informe os Parametros")
     
-    pDtInicio := DToS(MV_PAR01)
-    pDtFim := DToS(MV_PAR02)
+    cFilLog := MV_PAR01
+    pDtInicio := DToS(MV_PAR02)
+    pDtFim := DToS(MV_PAR03)
 
     
-        if (Empty(pDtInicio) .OR. Empty(pDtFim))
+        if (Empty(cFilLog) .OR. Empty(pDtInicio) .OR. Empty(pDtFim))
             MsgAlert("Uma das datas não foi informada. Preencha os campos de data corretamente.")
         else
             MntQry()
@@ -73,16 +76,15 @@ Static Function MntQry()
 
   // Pega dados do banco
   cQuery += "SELECT DISTINCT "
+  cQuery += " F1_FILIAL, "
   cQuery += " F1_DOC, "
-  cQuery += " F1_SERIE, " 
-  cQuery += " F1_TIPO, "
+  cQuery += " F1_SERIE, "
   cQuery += " F1_FORNECE, " 
   cQuery += " F1_LOJA, "
-  cQuery += " CASE WHEN F1_TIPO = 'N' THEN A2_NOME ELSE A1_NOME END 'NOME', "
+  cQuery += " A2_NOME, "
   cQuery += " F1_EMISSAO, " 
   cQuery += " F1_DTDIGIT, "
   cQuery += " F1_VALMERC, "
-  cQuery += " F1_DUPL "
   cQuery += " E2_NATUREZ, "
   cQuery += " ED_DESCRIC, "
   cQuery += " F1.D_E_L_E_T_ "
@@ -93,7 +95,7 @@ Static Function MntQry()
   cQuery += " LEFT JOIN " + RetSQLName('SA2') + " AS A2 ON F1_FORNECE = A2_COD AND F1_LOJA = A2_LOJA "
   cQuery += " LEFT JOIN " + RetSQLName('SED') + " AS ED ON E2_NATUREZ = ED_CODIGO "
   cQuery += "WHERE F1_DTDIGIT "
-  cQuery += " BETWEEN " + "'" + pDtInicio + "'" + " AND " + "'" + pDtFim + "'" + " AND F1.D_E_L_E_T_ = ' '"
+  cQuery += " BETWEEN " + "'" + pDtInicio + "'" + " AND " + "'" + pDtFim + "'" + " AND F1.D_E_L_E_T_ = ' ' AND F1_TIPO = 'N' AND F1_FILIAL = '" + cFilLog + "'" 
 
   cQuery := ChangeQuery(cQuery)
 
@@ -132,7 +134,6 @@ Static Function GeraExcel()
   // Adicionando colunas
   oExcel:AddColumn("NF", "Notas Fiscais de Entrada", "Documento",1,1)
   oExcel:AddColumn("NF", "Notas Fiscais de Entrada", "Serie",2,1)
-  oExcel:AddColumn("NF", "Notas Fiscais de Entrada", "Tipo",2,1)
   oExcel:AddColumn("NF", "Notas Fiscais de Entrada", "Cod. Fornecedor",1,1)
   oExcel:AddColumn("NF", "Notas Fiscais de Entrada", "Loja",1,1)
   oExcel:AddColumn("NF", "Notas Fiscais de Entrada", "Razao Social",2,1)
@@ -145,7 +146,7 @@ Static Function GeraExcel()
   While TR1->(!EoF())
 
     // Adicionando linhas
-    oExcel:AddRow("NF","Notas Fiscais de Entrada",{TR1->(F1_DOC),TR1->(F1_SERIE),TR1->(F1_TIPO),TR1->(F1_FORNECE),TR1->(F1_LOJA),TR1->NOME,SToD(TR1->(F1_EMISSAO)),SToD(TR1->(F1_DTDIGIT)),TR1->(F1_VALMERC),TR1->(F1_DUPL),TR1->(E2_NATUREZ),TR1->(ED_DESCRIC)})
+    oExcel:AddRow("NF","Notas Fiscais de Entrada",{TR1->(F1_DOC),TR1->(F1_SERIE),TR1->(F1_FORNECE),TR1->(F1_LOJA),TR1->(A2_NOME),SToD(TR1->(F1_EMISSAO)),SToD(TR1->(F1_DTDIGIT)),TR1->(F1_VALMERC),TR1->(E2_NATUREZ),TR1->(ED_DESCRIC)})
 
     lOk := .T.
     TR1->(DBSkip())
