@@ -12,6 +12,7 @@ Funcao usada para chamar as funcoes de montagem da query, criacao da parambox e 
 User Function RLNFENT()
 
   Public cFilLog      := ""
+  Public cDir
   Public pDtInicio    := ""
   Public pDtFim       := ""
 
@@ -122,7 +123,8 @@ Static Function GeraExcel()
   Local oExcel := FWMSEXCEL() :New()
   Local lOk := .F.
   Local cArq := ""
-  Local cDirTmp := "C:\TOTVS\"
+  Local cDirTmp := "C:\RelatorioProtheus\"
+  Local nRet := .F.
 
   DBSelectArea("TR1")
   TR1->(DbGoTop())
@@ -154,7 +156,18 @@ Static Function GeraExcel()
 
   oExcel:Activate()
 
-  cArq := CriaTrab(NIL, .F.) + ".xls"
+  if(ExistDir(cDirTmp) == .F.)
+    nRet := MakeDir( cDirTmp )
+   
+    if nRet != 0
+      conout( "Não foi possível criar o diretório. Erro: " + cValToChar( FError() ) )
+    else
+      MsgInfo("Diretorio " + cDirTmp + " criado com sucesso.","Diretorio")
+    endif
+
+  EndIf
+
+  cArq := GetNextAlias() + ".xls"
   oExcel:GetXMLFile(cArq)
 
   if __CopyFile(cArq,cDirTmp + cArq)
