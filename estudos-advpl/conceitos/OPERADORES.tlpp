@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #INCLUDE 'totvs.ch'
 
 /*/{Protheus.doc} OPERADORES
@@ -114,3 +115,121 @@ User Function OPERADORES()
 
 
 Return
+=======
+#INCLUDE 'totvs.ch'
+
+/*/{Protheus.doc} OPERADORES
+@Description 
+@Type		 
+@Author 	 
+@Since  	 27/01/2024
+/*/
+User Function OPERADORES()
+
+  //  Operadores de Atribuicao
+
+  numero := 10 //-- Atribuicao simples
+  numero += 20 //-- Soma e atribui
+  numero -= 20 //-- Subtrai e atribui
+  numero *= 10 //-- Multiplica atribui
+  numero /= 10 //-- Divide e atribui
+
+
+  // Operadores comuns
+
+  numero := 10
+  numero := numero + 20
+  numero := numero - 20
+  numero := numero * 10
+  numero := numero / 10
+  numero := numero ** 10
+  numero := numero % 10
+
+
+  // Operadores Logicos
+
+  nome = 'ZZZZ' // O operador de igual pode ser usado como sinal de atribuição quando não ocorre a declaracao da variavel
+  lret := nome = 'ZZZ' // utilizado para comparacao simples de valores
+  lret := nome == 'ZZZ' // utilizado para comparacao exatamente de valores
+  lret := numero > 10 // utilziado para comparacao de tamanho
+  lret := numero >= 10
+  lret := numero < 10
+  lret := numero <= 10
+  lret := numero <> 10 // expressao que equivale a comparacao de diferente
+  lret := numero != 10 // expressao de comparacao de diferente
+  lret := ! numero = 10 // negacao do resultado
+  lret := .not. numero = 10 // negacao do resultado
+  lret := numero > 10 .and. numero < 100 // 
+  lret := numero > 10 .or. numero <100 //  
+
+
+  // Operados com Textos
+
+  nome := 'Tulio '
+  sobrenome := 'Bastos'
+  nome_completo := nome
+  nome_completo += sobrenome
+  nome_completo := nome
+  nome_completo -= sobrenome // concatena as strings juntando todas elas e os espacos sao jogados para o final
+  lret := nome $ nome_completo // verifica se a variavel nome pertence a variavel nome_completo
+  lret := sobrenome $ nome_completo // verifica se a variavel sobrenome pertence a variavel nome_completo
+
+
+  // Operadores com Data
+
+  data_login := Date() //retorna data do sistema
+  data_login += 10 //soma mais 10 dias na data
+  data_login -= 10 //subtrai menos 10 dias na tada
+
+
+  // Operadores Incrementais e Deprementais ++ --
+  total := 0
+  numero := 10
+
+      // Posfixados - O incremento vai ocorrer após a operacao em que a variavel esta, termine
+      total := numero++ + 10 //incrementa o ++ e depois soma mais 10
+      total1 := numero-- - 10 //
+
+      // Prefixados - O incremento vai ocorrer antes da operacao em que a variavel esta, termine
+      total := ++numero + 10 //primeiro executa o incremento para depois executar o resto da operacao
+      total1 := --numero + 10
+
+  
+  // Operadores Especiais
+
+      // Operador de Apelido (->)
+      M -> A1_COD := '' // Faz referencia a uma area da memoria
+      SA1 -> A1_COD := '' // Faz referencia a um campo dentro da tabela no banco
+
+      // Operador de Agrupamento ou funcao ()
+      (total1 := numero + parametro, total2 := numero - parametro * 2)
+
+      funcao() //usando o () em funcao
+
+      // Operador de Macrosubstituicao &
+      total := &('numero') + 10 // essa funcao anula aspas do conteudo. Aqui ele vai retirar as aspas da palavra numero, fazendo com que 'numero' se torne a variavel chamada numero
+
+      // Definicao de matriz ou bloco de codigo {}
+
+      lista_numeros := {10,20,30,40,50}
+      bloco := {|| FWAlertInfo('Ok')}
+
+      // Passagem de parametro por referencia @
+      numero := 10
+      soma_numero(@numero,parametro)
+      
+      Static Function soma_numero(p1,p2)
+
+      p1 := p1 * p2
+      p2 := p1
+      Return
+
+      // 
+
+
+
+
+
+
+Return
+>>>>>>> 5434093da8218667dacd9915b20801d04205a82c
