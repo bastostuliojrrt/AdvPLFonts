@@ -1,0 +1,52 @@
+<div style="display: flex; justify-content: space-around; align-items:center;">
+
+<img src="https://cdn.icon-icons.com/icons2/2107/PNG/512/file_type_advpl_icon_130762.png" width="150" height="150" style="margin-right: 40px;">
+
+# AREAS DE TRABALHO (WORKAREA)
+</div>
+
+---
+#### Componentes disponiveis por Area de Trabalho:
+-  Tabelas de bancos de dados relacionais (ORACLE, POSTGRES, SQL SERVER, ...)
+-  Arquivos de bancos não relacionais (CTREE, BTRIEVE, ...)
+-  Arquivos temporários de dados
+-  Resultado de consultas SQL
+-  Leitura de arquivos de texto
+
+#### Tabelas identificadas por meio de Alias 
+- SA1, SA2, SB1, AA1, ...
+    - 01 -> SA1010
+    - 02 -> SA1020
+    - 99 -> SA1990
+
+- TRB, ... (Arquivos de trabalho temporarios) 
+- SCN0000001, ... (Consultas SQL)
+
+#### Campos de tabelas do banco de dados são definidos de acordo com o alias
+- SA1 -> Cadastro de Clientes -> A1_EMAIL: EMAIL DO CLIENTE
+- AA1 -> Cadastro de Atendentes -> AA1_EMAIL: EMAIL DO ATENDENTE  
+
+#### Possuem um RDD (Replaceable Database Drivers)     
+- TOPCONN (Comunicação com banco de dados relacional por meio do DBAccess)
+- DBFCDX (Comunicação por arquivos fisicos no padrão DBF)
+- SQLITE (Comunicação com banco de SQLITE)
+- CTREECDX (Comunicação por arquivos fisicos no padrão CTREE)
+
+> ---
+> **Observações:**
+> ###### Não possuem relacionamentos por chave estrangeira
+> ###### Possuem diversos indices, sendo um unico definido como chave primaria baseado no RECNO (R_E_C_N_O_)
+> ###### Indices sempre devem levar em conta o campo filial da tabela (A1_FILIAL+A1_CGC)
+> ###### Não trabalham com deleção física por padrão (Controle feito através de D_E_L_E_T_ e R_E_C_D_E_L_)
+> ---
+> ###### Interações são feitas por meio de funções e comandos ADVPL/TLPP:   
+> - DBSELECTAREA
+> - DBSETORDER
+> - DBUSEAREA
+> - DBSEEK, MSSEEK
+> - DBSKIP
+> - DBGOTO
+> - DBCLOSEAREA
+> - MPSYSOPENQUERY
+> ---
+
