@@ -1,0 +1,110 @@
+#INCLUDE 'totvs.ch'
+
+/*/{Protheus.doc} ARRAY
+(long_description)
+@type user function
+@author user
+@since 17/07/2024
+@version 1.0
+@return return_var, return_type, return_description
+@example
+(examples)
+@see (links_or_references)
+/*/
+User Function ARRAY()
+
+// Declarando uma variavel do tipo array
+
+Local aArray  := {} as array
+Local aArray2 := {"1",2,"testando"} as array
+
+// Declarando uma variavel do tipo array definindo o tamanho 
+
+Local aArray3 := (3) as array //array de 3 posicoes
+Local aArray4 := (3,{"1",2,.T.}) as array //array de 3 posicoes com valores pre-setados
+Local aArray5 := (1,{"1",2,.T.}) as array //array de 1 posicao com valores pre-setados
+
+// Introduzindo matriz
+
+Local aArray6 := {
+  {1,2,3},
+  {"Opcao 1","Opcao 2","Opcao 3"}
+} //uma matriz 2x3, ou seja, 2 linhas e 3 colunas
+
+
+// Adicionando conteudo em um array fora da declaracao da variavel
+
+// Utilizando a funcao aAdd(array,valor a ser adicionado), conseguimos inserir novos valores no array
+
+aAdd(aArray,"1")
+aAdd(aArray,2)
+aAdd(aArray,"teste")
+
+
+// Existe a possibilidade de inserimos matrizes dentro de arrays
+
+aAdd(aArray2,{1,2,3,{"Teste 1", "Teste 2"}})
+
+
+// Fazendo referencia as posicoes do array
+
+aArray3[1] := "Pos1"
+aArray3[2] := "Pos2"
+aArray3[3] := "Pos3"
+
+
+// Criando uma matrix e alterando o valor de determinada posicao
+Local aArray7 := (4) as array
+
+aAdd(aArray7,{1,'Opcao 1'})
+aAdd(aArray7,{4,'Opcao 4'})
+aAdd(aArray7,{3,'Opcao 3'})
+aAdd(aArray7,{2,'Opcao 2'})
+
+aArray7[3][1] := 5
+aArray7[3][2] := 'Opcao 5'
+
+
+// Ordenando um array
+
+aSort(aArray7,,,(|x,y| x[1] > y[1])) //funcao aSort ordena o array baseado nos parametros enviados. o bloco de codigo faz criterio de ordenacao onde o valor de x eh maior que o valor de y, ou seja, a linha eh maior que a coluna.
+aSort(aArray7,,,(|x,y| x[2] > y[2]))
+
+
+//Procurando conteudo dentro de arrays
+
+// Arrya Simples
+Local aArray8 := {'PE','PB','SC','SP','RJ','AL'}
+
+// nPos eh uma variavel criada para receber a posicao em que o dado buscado se encontra
+nPos := aScan(aArray8,"SP") //aScan eh uma funcao que vai buscar dentro do array o valor procurado. Os parametros sao (array,valor procurado)
+
+// Matriz
+Local aArray9 := {}
+
+aAdd(aArray9,{'PE', 'Pernambuco'})
+aAdd(aArray9,{'PB', 'Paraiba'})
+aAdd(aArray9,{'SC', 'Santa Catarina'})
+aAdd(aArray9,{'SP', 'Sao Paulo'})
+aAdd(aArray9,{'RJ', 'Rio de Janeiro'})
+
+nPos2 := aScan(aArray9,{|x| x[2] == "Sao Paulo"}) //usamos um bloco de codigo pois o array, na vdd, eh uma matriz, e com o bloco de codigo conseguimos passar o nosso criterio de busca
+
+
+//Copiando o conteudo de um array para outro
+
+local aArray10 := {}
+
+aArray10 := aArray9 // Essa forma de atribuicao não esta totalmente correta pois o que eh passado para o aArray10 eh a referencia da memoria dos valores do aArray9, logo se uma alteracao for feita em um posicao do aArray10, tambem ira alterar o aArray9
+
+aArray10 := aClone(aArray9) //Para que apenas os valores sejam passados para o novo array e nao a sua referencia, precisamos usar a funcao aClone()
+
+
+//Executando um bloco de codigo para cada posicao do array
+
+aEval(aArray10,|x| fwAlertWarning(x[2],x[1])) // Para cada posicao do array que ele passar, sera emitido um alerta onde a mensagem eh o conteudo da segunda coluna e o titulo eh o conteudo da primeira coluna
+
+// Titulo: PE
+// Mesagem: Pernambuco
+
+Return 
