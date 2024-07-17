@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #include 'totvs.ch'
 
 Function U_BLOCOSDECODIGO
@@ -11,27 +10,8 @@ Function U_BLOCOSDECODIGO
 
 return
 
-Static Function executar(xParam as variadic) // O tipo de dado variadic diz que a variavel pode recebir um numero indefinido de parametros
+Static Function executar(xParam as variadic) // O tipo de dado "variadic" diz que a variavel pode recebir um numero indefinido de parametros
 
     eval(xParam:vArgs[1],xParam:vArgs[2],xParam:vArgs[3])
 
 return
-=======
-#include 'totvs.ch'
-
-Function U_BLOCOSDECODIGO
-
-    Local bBlocoExemplo := {|cTexto,cTitulo| fwAlertInfo(cTexto,cTitulo)} as codeblock //
-
-    eval(bBlocoExemplo,"Esse eh um texto de exemplo de bloco de codigo","Esse eh o titulo da janela") //funcao eval executa o bloco de codigo ('nome_dafuncao_bloco', cTexto, cTitulo)
-
-    executar(bBlocoExemplo,"Esse eh outro exemplo","Com outro titulo")
-
-return
-
-Static Function executar(xParam as variadic) // O tipo de dado variadic diz que a variavel pode recebir um numero indefinido de parametros
-
-    eval(xParam:vArgs[1],xParam:vArgs[2],xParam:vArgs[3])
-
-return
->>>>>>> 5434093da8218667dacd9915b20801d04205a82c
