@@ -5,7 +5,6 @@
 # AREAS DE TRABALHO (WORKAREA)
 </div>
 
----
 #### Componentes disponiveis por Area de Trabalho:
 -  Tabelas de bancos de dados relacionais (ORACLE, POSTGRES, SQL SERVER, ...)
 -  Arquivos de bancos não relacionais (CTREE, BTRIEVE, ...)
