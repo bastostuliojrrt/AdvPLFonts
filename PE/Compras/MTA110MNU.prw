@@ -1,38 +1,32 @@
 #Include 'Protheus.ch'
+#Include "rwmake.ch"
+#Include "topconn.ch"
+
+/*/{Protheus.doc} MTA110MNU
+
+Adicionando a função F4 para consulta de estoque na rotina MATA110 - Solicitações de Compras
+
+@type user function
+@Tulio Bastos
+@since 26/07/2024
+@version v2.0
+@example
+(examples)
+@see (links_or_references)
+/*/
 
 User Function MTA110MNU()
 
-//Customizações do cliente
+  SetKey(VK_F4, { || MTA110F4() })
+    
+Return 
 
-aadd(aRotina,{'Consultar Estoque','U_zViewSB2()',0,3,0,NIL})
-Return aRotina
+Static Function MTA110F4()
+
+IF ALLTRIM(FUNNAME()) == "MATA110"           
+	MaViewSB2(M->C1_PRODUTO)     
+Else
+	SetKey(VK_F4, { || })	
+EndIf
 
 Return
-
-/*/{Protheus.doc} F4CONULT
-scription)
-  @type  Static Function
-  @author user
-  @since 26/07/2024
-  @version version
-  @param param_name, param_type, param_descr
-  @return return_var, return_type, return_description
-  @example
-  (examples)
-  @see (links_or_references)
-/*/
-
-User Function zViewSB2()
-    Local aArea    := FWGetArea()
- 
-    DbSelectArea('SB1')
-    SB1->(DbSetOrder(1)) // B1_FILIAL + B1_COD
- 
-    //Se conseguir posicionar no produto
-    If SB1->(DbSeek(FWxFilial('SB1') + M->C1_COD))
-        MaViewSB2(SB1->B1_COD)
-    EndIf
- 
-    FWRestArea(aArea)
-Return
-
