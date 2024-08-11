@@ -1,0 +1,19 @@
+## ° TCQuery
+
+TCQuery é um dos comandos usados para realizar consultas SQL no AdvPL. Entre o TCQuery e o Embedded SQL, recomendamos a utilização do Embedded SQL, pois ele encapsula ChangeQuery entre outras regras, assim como gera cache da query para evitar que a ChangeQuery seja chamada novamente para querys iguais com parâmetros diferentes, ganhando assim performance no parse da query.
+
+Usando o TCQuery:
+
+      User Function ExemploSQL01()
+
+          aDados as array
+          cSQL := "SELECT A1_COD, A1_LOJA, A1_NOME, D_E_L_E_T_ DELETE_ A1_DTNASC FROM SA1010 ORDER BY A1_COD"
+
+          tcQuery cSQL new alias QRY
+
+          // Ajustando o campo data
+          tcSetField("QRY","A1_DTNASC","D",8,0)
+
+          QRY->(dbEvel({|| aAdd(aDados,{A1_COD,A1_LOJA,A1_NOME,A1_DTNASC,DELETE_})}))
+
+      Return
