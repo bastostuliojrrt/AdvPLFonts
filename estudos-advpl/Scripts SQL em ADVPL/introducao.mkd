@@ -1,0 +1,39 @@
+### Introdução
+
+Aprendendo a trabalhar com consulta SQL no AdvPL.
+
+No AdvPL os dados não são deletados fisicamente do banco de dados. É utilizado o campo **D_E_L_E_T_** para marcar um registro que foi excluído via rotina.
+
+Exemplo de consulta SQL através do AdvPL:
+
+      User Function Exemplo01()
+
+          Local cSQL    := ''
+          Local aDados  := {}
+
+          cSQL          := "SELECT A2_COD, A2_LOJA, A2_NOME, A2_DTNASC"
+          cSQL          += "  FROM SA2990 WHERE D_E_L_E_T_ = ' ' "
+          cSQL          += "ORDER BY A2_NOME"
+
+          // Criando uma área de trabalho temporária
+          dbUseArea(.T.,"TOPCONN",tcGenQry(,,cSQL),"QRY",.T.,.F.)
+
+          // Converte de um dado da área de trabalho para outro dado
+          tcSetField("QRY","A2_DTNASC","D",8,0) //convertemos a string do campo para o formato de data
+
+          // Para visualizar todos os registros retornados pela query usaremos o seguinte:
+
+          while .Not. QRY->(EoF()) // Enquanto não estiver no final da consulta QRY
+
+            // Adiciona o registro da linha da consulta no array aDados
+            QRY->(aAdd(aDados,{A2_COD,A2_LOJA,A2_NOME,A2_DTNASC}))
+
+            // Passa para a próxima linha da consulta
+            dbSkip()
+
+            QRY->(dbCloseArea())
+
+          Enddo
+
+      Return aDados
+
