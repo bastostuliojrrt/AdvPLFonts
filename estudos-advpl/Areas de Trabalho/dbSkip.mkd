@@ -1,0 +1,9 @@
+## ° dbSkip
+
+Função utilizada para pular para o próximo registro da área de trabalho
+
+O dbSkip pode receber um parâmetro numérico para informa a quantidade de registros que serão pulados:
+
+- dbSkip() -> avança de 1 em 1
+- dbSkip(2) -> avança de 2 em 2
+- dbSkip(-3) -> retrocede de 3 em 3

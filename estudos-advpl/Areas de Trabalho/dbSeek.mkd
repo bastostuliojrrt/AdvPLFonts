@@ -1,0 +1,14 @@
+## ° dbSeek
+
+Localiza um registro com determinado valor da expressão de chave de índice.
+
+Sintaxe
+
+      DBSeek( < xExp >, [ lSoftSeek ], [ lLast ] )
+      
+
+|    Nome   |    Tipo    |                              Descrição                               |
+|-----------|------------|----------------------------------------------------------------------|
+|    Exp    |  Qualquer  |Indica o valor da chave que será encontrada do tipo caracter.         |
+| lSoftSeek |    lógico  |Indica se, verdadeiro (.T.), posiciona no primeiro registro com expressão de chave maior que o valor procurado; caso contrário, falso (.F.) (Valor padrão).|
+|   lLast   |   lógico   |Parâmetro de compatibilidade. Deve ser informado o valor nulo ( NIL ).|

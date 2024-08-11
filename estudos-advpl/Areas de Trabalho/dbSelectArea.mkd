@@ -1,0 +1,18 @@
+## ° dbSelectArea
+
+Função utilizada para criar áreas de trabalho em um fonte.
+
+Função exemplo criando uma área de trabalho: 
+
+    #Include 'Totvs.ch'
+
+    User Function Exemplo01()
+
+        // Selecionando a tabela de Produtos através do Alias
+        dbSelectArea("SB1")
+
+        //Selecionando a tabela de Produtos através do seu Identificador Numérico
+        nAreaSB1 := select("SB1")
+        dbSelectArea(nAreaSB1)
+
+    return

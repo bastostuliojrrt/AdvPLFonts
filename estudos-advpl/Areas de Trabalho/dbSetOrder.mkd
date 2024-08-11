@@ -1,0 +1,18 @@
+## ° Índices da tabela
+
+Por padrão, nas tabelas são mostrados os registrados na ordem em que são inseridos na tabela no banco de dados. Os índices são usados para mudar essa ordem de acordo com sua configuração e facilitar o processo de busca em uma tabela.
+
+A função **dbSetOrder** é utilizada para setar o índice de uma tabela
+
+Exemplo:
+
+      User Function Exemplo03()
+
+          // Setando a tabela SA2 e seu índice 11
+          dbSelectArea("SA2")
+          dbSetOrder(11)
+
+          // Executando ordenação para uma tabela específica sem ser a tabela principal
+          SA1->(dbSetOrder(3))
+
+      Return

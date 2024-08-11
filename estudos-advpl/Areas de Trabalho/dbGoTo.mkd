@@ -1,0 +1,15 @@
+## ° dbGoTo
+
+Função que utiliza do campo R_E_C_N_O_ para ir até um registro do banco de dados
+
+Exemplo:
+
+- dbGoTo(2) -> vai para o registro 2 da tabela
+
+## ° dbGoTop 
+
+Vai para o primeiro registro 
+
+## ° dbGoBottom
+
+vai para o último registro

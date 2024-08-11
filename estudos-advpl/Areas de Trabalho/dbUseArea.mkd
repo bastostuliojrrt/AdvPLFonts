@@ -1,0 +1,30 @@
+## ° dbUseArea
+
+Um pouco parecida com a dbSelectArea, porém aqui é possível utilizar tabelas temporárias e outros parâmetros.
+
+Exemplo:
+
+      User Function Exemplo02()
+
+          lNewArea  := .T.
+          cDriver   := 'TOPCONN'
+          cArquivo  := retSqlName("SA1")
+          cAlias    := 'SA1'
+          lShadred  := .T.
+          lReadOnly := .F.
+
+          dbUseArea(lNewArea,cDriver,cArquivo,(cAlias),lShared,lReadOnly)
+
+          dbSelectArea("SA1")
+
+          //          SA1990  +  1 = SA19901 - Setando indice 1 na SA1
+          cIndex1 := cArquivo + '1'
+
+          //          SA1990  +  2 = SA19902 - Setando indice 2 na SA1
+          cIndex2 := cArquivo + '2'
+
+          // Carrega o índice em uma área de trabalho
+          dbSetIndex(cIndex1)
+          dbSetIndex(cIndex2)
+
+      Return

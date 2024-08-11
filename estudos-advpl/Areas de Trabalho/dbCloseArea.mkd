@@ -1,0 +1,25 @@
+## ° dbCloseArea
+
+Indica para o sistema que determinada área de trabalho será encerrada pois não será mais usada.
+
+      User Function Exemplo01()
+
+          SA2->(dbSetOrder(1),dbGoTop())
+
+          While .NOT. SA2->(EOF())
+
+              SA2->(reclock("SA2",.F.)) // Reservo o registro para ser alterado
+
+              SA2->A2_NREDUZ := Left(SA2->A2_NOME, AT(" ", SA2->A2_NOME)) // Faço a alteração que preciso
+
+              SA2->(msunlock()) // Destravo o registro
+
+              SA2->(dbSkip()) // Passo para o próximo registro
+
+          Enddo
+              
+          fwAlertInfo("Ok")
+
+          SA2->(dbCloseArea()) // Fechando a área de trabalho SA2
+
+      Return 
