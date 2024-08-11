@@ -26,10 +26,7 @@ Local aArray5 := (1,{"1",2,.T.}) as array //array de 1 posicao com valores pre-s
 
 // Introduzindo matriz
 
-Local aArray6 := {
-  {1,2,3},
-  {"Opcao 1","Opcao 2","Opcao 3"}
-} //uma matriz 2x3, ou seja, 2 linhas e 3 colunas
+Local aArray6 := {{1,2,3},{"Opcao 1","Opcao 2","Opcao 3"}} //uma matriz 2x3, ou seja, 2 linhas e 3 colunas
 
 
 // Adicionando conteudo em um array fora da declaracao da variavel
