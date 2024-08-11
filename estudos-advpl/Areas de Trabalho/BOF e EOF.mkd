@@ -1,0 +1,25 @@
+## ° BOF
+
+Indica quando o ponteiro da área de trabalho está posicionado no início do arquivo
+
+## ° EOF
+
+Indica quando o ponteiro da área de trabalho está posicionado no final do arquivo
+
+
+      User Function Exemplo01()
+
+          Local nQuantidadeDeResgistros := 0
+
+          SA2->(dbSetOrder(1),dbGoTop())
+
+          While .NOT. SA2->(EOF())
+
+            nQuantidadeDeResgistros++
+            SA2->(dbSkip())
+          
+          Enddo
+
+          fwAlertInfo('Quantidade de Registros: ' + cValToChar(nQuantidadeDeResgistros))
+
+      Return
