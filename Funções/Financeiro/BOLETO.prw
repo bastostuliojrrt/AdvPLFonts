@@ -30,6 +30,7 @@
   @menu \SIGAFIN\Atualização\Específico\Boleto
   @history
   27/10/2015 - Desenvolvimento da Rotina.
+  06/08/2024 - Alteracao no boleto para geracao do banco SICREDI
 /*/
 User Function BOLETO(nTela,aParam,pTipo,pGerArq)
   Local aRegs     := {}
