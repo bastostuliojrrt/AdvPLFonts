@@ -1,0 +1,28 @@
+## ° RecLock
+
+Utilizado para reservar um registro para alteração ou pra indicar que será executada uma inclusão.
+
+## ° MsUnLock
+
+Utilizado para destravar e confirmar a inclusão/alteração de registros
+
+
+      User Function Exemplo01()
+
+          SA2->(dbSetOrder(1),dbGoTop())
+
+          While .NOT. SA2->(EOF())
+
+              SA2->(reclock("SA2",.F.)) // Reservo o registro para ser alterado
+
+              SA2->A2_NREDUZ := Left(SA2->A2_NOME, AT(" ", SA2->A2_NOME)) // Faço a alteração que preciso
+
+              SA2->(msunlock()) // Destravo o registro
+
+              SA2->(dbSkip()) // Passo para o próximo registro
+
+          Enddo
+              
+          fwAlertInfo("Ok")
+
+      Return 
