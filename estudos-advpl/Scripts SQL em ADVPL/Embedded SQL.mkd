@@ -1,0 +1,45 @@
+# ° Embedded SQL
+
+O objetivo do Embedded SQL é facilitar a escrita e leitura de queries. Para isso, foi definida uma sintaxe para que se possa escrever a query diretamente no código AdvPL, sem a necessidade de ficar concatenando pedaços de string para compor a string final.
+
+
+#### Diferença entre TCQuery e Embedded SQL:
+
+Utilizando TCQuery:
+
+      Exemplo Básico
+      cQuery:= ' SELECT SE2.E2_PREFIXO,SE2.E2_NUM '
+      cQuery += ' FROM '+RetSqlTable('SE2')+' SE2,'+ RetSqlTable('QEK') + ' QEK '
+      cQuery += ' WHERE SE2.E2_FILIAL= '+xfilial('SE2')+' AND '
+      cQuery += ' SE2.E2_PREFIXO <> ''+cPrefixo+'' AND '
+      cQuery += " SE2.D_E_L_E_T_ = ' ' "
+      cQuery += ' ORDER BY '+RetSqlOrder('SE2')
+      
+      dbUseArea(.T.,'TOPCONN',TcGenQry(,,cQuery),'E2TEMP',.T.,.T.)
+      
+      TCSetField('E2TEMP','E2_EMISSAO','D',8,0)
+
+Usando Embedded SQL
+
+      BeginSql alias 'E2TEMP'
+
+      column E2_EMISSAO as Date
+      SELECT
+          SE2.E2_PREFIXO,
+          SE2.E2_NUM
+      FROM
+          %table:SE2% SE2,%table:QEK% QEK
+      WHERE
+          SE2.E2_FILIAL = %xfilial:SE2% AND
+          SE2.E2_PREFIXO <> %exp:cPrefixo% AND
+          SE2.%notDel% ORDER BY %Order:SE2%
+      EndSql
+
+
+## Características operacionais - Sintaxe
+
+- O bloco de código onde será escrito o comando SELECT, deve sempre ser iniciado com BeginSQL Alias e finalizado com EndSQL.
+- Partes do código-fonte que devem ser substituídos aparecem entre os sinais de % (porcentagem). Essas expressões possuem tratamentos especiais em momento de execução.
+- Qualquer instrução colocada entre BeginSQL ... EndSQL, que não seja uma expressão %...%, será inserida na query que será enviada para o banco de dados, de forma literal.
+- Variáveis, expressões e funções aparecem iniciando com %exp:%.
+- Em column deve-se especificar campos da query que são do tipo de dado data, lógico ou numérico (DATE, LOGIC, NUMBER). Esta linha é trocada por chamadas à função TCSetField().
