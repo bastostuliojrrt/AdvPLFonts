@@ -1,0 +1,17 @@
+## Updates SQL em AdvPL
+
+      User Funcetion Exemplo01()
+
+        cSQL := "UPDATE " + retSqlName("SA1")
+        cSQL += CRLF + "SET D_E_L_E_T_ = ' ' "
+        cSQL += CRLF + "WHERE D_E_L_E_T_ = '*' "
+
+        // Executa a query SQL retornando um numerico se der certo. Se a execução não ocorrer, retorna um número negativo.
+        nSQL := tcSqlExec(cSQL) 
+
+        // Tratamento para caso o update não ocorra corretamente
+        if nSQL < 0
+          fwAlertError(tcSqlError(), 'ERRO UPDATE SQL')
+        endif
+
+      Return
