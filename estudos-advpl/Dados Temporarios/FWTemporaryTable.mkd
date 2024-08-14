@@ -1,0 +1,3 @@
+## ° FWTemporaryTabel
+
+É a função **recomendada** pela TOTVS utilizada para criar arquivos temporários, como por exemplo, telas para marcações de dados, tela para escolher um registro a ser impresso, são exemplos de dados temporários.
