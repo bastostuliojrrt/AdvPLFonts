@@ -11,7 +11,7 @@ Exemplo:
           // Estrutura dos campos do aCampos
           Local aCampos := {{"ENTIDADE","C",3,0},{"CODIGO","C",6,0},{"LOJA","C",2,0},{"NOME","C",30,0}}
 
-          // A função cria trab precisa de um array de campos e um boolean pra indicar se a area deve ser criada
+          // A função criatrab precisa de um array de campos e um boolean pra indicar se a area deve ser criada
           cArqTrab := criatrab(aCampos,.T.)
 
           // Disponibilizando o cArqTrab como área de trabalho
