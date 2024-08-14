@@ -1,3 +1,58 @@
 ## ° FWTemporaryTabel
 
 É a função **recomendada** pela TOTVS utilizada para criar arquivos temporários, como por exemplo, telas para marcações de dados, tela para escolher um registro a ser impresso, são exemplos de dados temporários.
+
+Exemplo:
+
+      User Function ARQTEMP02()
+
+          Local oTempTable as object
+          Local cAliasTemp as character
+          Local cRealName as character
+          Local aCampos as array
+
+
+          rpcSetEnv('99','01')
+
+          cAliasTemp := 'TRBSA1SA2'
+
+          // Instanciando a classe FWTemporaryTable
+          oTempTable := FWTemporaryTable():new(cAliasTemp)
+          
+          // Define a estrutura do arquivo temporário
+          oTempTable:setFields({{"ENTIDADE","C",3,0},{"CODIGO","C",6,0},{"LOJA","C",2,0},{"NOME","C",30,0}})
+
+          // Define o índice
+          oTempTable:addIndex("IND_1",{"ENTIDADE","CODIGO","LOJA"})
+
+          // Criando o arquivo temporário
+          oTempTable:create()
+
+          // Descobrindo o nome do arquivo temporário criado no banco
+          cRealName := oTempTable:getRealName()
+
+          // Populando o arquivo temporário com dados
+
+          dbSelectArea('SA1')
+          dbSetOrder(1)
+
+          While .NOT. EOF()
+
+            (cAliasTemp)->(reclock(alias(),.T.), CODIGO := SA1->A1_COD, LOJA := SA1->A1_LOJA, NOME := SA1->A1_NOME, ENTIDADE := SA1->(alias()), msunlock())
+
+            // ou
+
+            reclock(cRealName,.T.)
+
+              CODIGO    := A1_COD
+              LOJA      := A1_LOJA
+              NOME      := A1_NOME
+              ENTIDADE  := alias()
+
+            msunlock()
+
+          Enddo
+
+          rpcClearEnv()
+
+      Return
