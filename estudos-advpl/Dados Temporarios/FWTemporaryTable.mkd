@@ -9,10 +9,8 @@ Exemplo:
           Local oTempTable as object
           Local cAliasTemp as character
           Local cRealName as character
-          Local aCampos as array
 
-
-          rpcSetEnv('99','01')
+          rpcSetEnv('01','010101')
 
           cAliasTemp := 'TRBSA1SA2'
 
@@ -36,7 +34,7 @@ Exemplo:
           dbSelectArea('SA1')
           dbSetOrder(1)
 
-          While .NOT. EOF()
+          While !EOF()
 
             (cAliasTemp)->(reclock(alias(),.T.), CODIGO := SA1->A1_COD, LOJA := SA1->A1_LOJA, NOME := SA1->A1_NOME, ENTIDADE := SA1->(alias()), msunlock())
 
