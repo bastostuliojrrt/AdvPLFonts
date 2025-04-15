@@ -743,7 +743,8 @@ Static Function ImpBol(aTitulos)
                                   SE1->E1_VENCREA,;                        // [08]-Vencimento
                                   aBanco[9],;                              // [09]-Convêncio
                                   SEE->EE_XMODULO,;                        // [10]-Modulo para calculo do digito verificador do Nosso Número
-                                  SEE->EE_XPESO)                           // [11]-Peso para calcular o digito do nosso número modulo 11
+                                  SEE->EE_XPESO,;                          // [11]-Peso para calcular o digito do nosso número modulo 11
+                                  SE1->E1_PARCELA)                           
 
           dbSelectArea("SE1")
 
@@ -956,6 +957,9 @@ Static Function fnImpres(oPrint,aEmpresa,aDadTit,aBanco,aSacado,aBolTxt,aCB_RN_N
 
       Case aBanco[1] == "748"                                                         // SICREDI
          cString := aBanco[3] + "." + aBanco[14] + "." + AllTrim(aBanco[4])
+      
+      Case aBanco[1] == "756"                                                         // SICOOB
+         cString := aBanco[3] + "/" + aBanco[9]
      OtherWise
           oPrint:Say(nRow1 + 0200,1125, aBanco[3] + IIf(Empty(AllTrim(aBanco[8])),"","-") + aBanco[8] +;
                                         " / " + AllTrim(aBanco[4]) + "-" + aBanco[5],oFont10)
@@ -1070,6 +1074,9 @@ Static Function fnImpres(oPrint,aEmpresa,aDadTit,aBanco,aSacado,aBolTxt,aCB_RN_N
 
       Case aBanco[1] == "748"                                        // SICREDI
          cString := aBanco[3] + "." + aBanco[14] + "." + AllTrim(aBanco[4])
+
+      Case aBanco[1] == "756"                                                         // SICOOB
+         cString := aBanco[3] + "/" + aBanco[9]
 
      OtherWise        
           cString := aBanco[3] + IIf(Empty(AllTrim(aBanco[8])),"","-") + aBanco[8] + " / " +;
@@ -1275,8 +1282,12 @@ Static Function fnImpres(oPrint,aEmpresa,aDadTit,aBanco,aSacado,aBolTxt,aCB_RN_N
 
       Case aBanco[1] == "422"                                        // SAFRA
           cString := aBanco[3] + " / " + aBanco[4] + aBanco[5]
+
       Case aBanco[1] == "748"                                        // SICREDI
           cString := aBanco[3] + "." + aBanco[14] + "." + AllTrim(aBanco[4])
+      
+      Case aBanco[1] == "756"                                                         // SICOOB
+         cString := aBanco[3] + "/" + aBanco[9]
      OtherWise                
           cString := aBanco[3] + IIf(Empty(AllTrim(aBanco[8])),"","-") + aBanco[8] + " / " +;
                      aBanco[4] + IIf(aBanco[1] == "422","","-") + aBanco[5]
@@ -1954,27 +1965,49 @@ Static Function Modulo11(cData,nPeso,cOrig)
          D := 1
       EndIf          
    EndIf
+
+   If cQualBco == "756"
+      If D == 0 .or. D == 1 .or. D > 9
+         D := 1
+      EndIf          
+   EndIf
    
 Return(D)
 
 
 Static Function Modulo11NN(cData,nPeso,cOrig)
   Local L, D, P := 0
+  Local nConst := "3197" // Constante usada no calculo do DV do SICOOB.
 
-  L := Len(cdata)
+  L := Len(cData)
   D := 0
   P := 1
 
-  While L > 0
-    P := P + 1
-    D := D + (Val(SubStr(cData, L, 1)) * P)
+   if cQualBco == "756"
 
-    If P = nPeso
-       P := 1
-    EndIf
-    
-    L := L - 1
-  EndDo
+      While L > 0
+         D := D + (Val(SubStr(cData, L, 1)) * Val(SubStr(nConst, P, 1)))
+
+         If P = 1
+            P := 5
+         EndIf
+         
+         L := L - 1
+         P := P - 1
+      EndDo 
+
+   else
+      While L > 0
+         P := P + 1
+         D := D + (Val(SubStr(cData, L, 1)) * P)
+
+         If P = nPeso
+            P := 1
+         EndIf
+         
+         L := L - 1
+      EndDo  
+   endif
 
   If cQualBco == "033" .and. Alltrim(cOrig) == "NN"
      If mod(D,11) < 2
@@ -2026,6 +2059,12 @@ Static Function Modulo11NN(cData,nPeso,cOrig)
       EndIf          
    EndIf
 
+   If cQualBco == "756"
+      If D == 11 .or. D == 10
+         D := 0 
+      EndIf          
+   EndIf
+
 Return(D)
 
 /*---------------------------------------------------------
@@ -2043,7 +2082,7 @@ Return(D)
 --                       Nosso numero                    --
 --                       Conta - tamanho 7 (sem digito)  --
 -----------------------------------------------------------*/
-Static Function Ret_cBarra(pBanco,pAgencia,pConta,pDacCC,pCart,pNNum,pValor,pVencto,pConvenio,pModDig,pPesoDig)
+Static Function Ret_cBarra(pBanco,pAgencia,pConta,pDacCC,pCart,pNNum,pValor,pVencto,pConvenio,pModDig,pPesoDig,pParcela)
   Local nCalFat := 0
 
   Private cBanco      := pBanco
@@ -2056,6 +2095,7 @@ Static Function Ret_cBarra(pBanco,pAgencia,pConta,pDacCC,pCart,pNNum,pValor,pVen
   Private cConvenio   := pConvenio
   Private cModDig     := pModDig
   Private nPesoDig    := pPesoDig
+  Private cParcela    := pParcela
   Private nDvnn       := 0
   Private nDvcb       := 0
   Private nDv         := 0
@@ -2068,12 +2108,29 @@ Static Function Ret_cBarra(pBanco,pAgencia,pConta,pDacCC,pCart,pNNum,pValor,pVen
   Private cFator      := ""
   Private cValorFinal := StrZero((nValor*100),10) //StrZero(Int(nValor*100),10)
 
-  If (dVencto - CToD("07/10/97")) > 9999
-     nCalFat := Val(SubStr(AllTrim(Str(dVencto - CToD("07/10/97"))),1,4))
-     nCalFat += dVencto - CToD("22/02/25")
-     cFator  := StrZero(nCalFat,4)
-  else
-     cFator  := StrZero(dVencto - CToD("07/10/97"),4)
+   // If (dVencto - CToD("07/10/97")) > 9999
+   //    nCalFat := Val(SubStr(AllTrim(Str(dVencto - CToD("07/10/97"))),1,4))
+   //    nCalFat += dVencto - CToD("22/02/25")
+   //    cFator  := StrZero(nCalFat,4)
+   // else
+   //    cFator  := StrZero(dVencto - CToD("07/10/97"),4)
+   // EndIf
+
+   If dVencto >= CTOD("22/02/2025")
+
+		cFator := STRZERO(1000 + (dVencto - CTOD("22/02/2025")),4)
+
+	Else
+
+		cFator := STRZERO(dVencto - CtoD("07/10/1997"),4)
+
+	EndIf
+
+
+  if(cParcela == "  ")
+     cParcela := "001"
+   else
+     cParcela := StrZero(Val(cParcela),3)
   EndIf
 
   cNNum    := pNNum
@@ -2421,7 +2478,7 @@ User Function fnSldBol(cPrefixo,cNum,cParcela,cCliente,cLoja)
  // ----------------------------------
   cPrefixo := Iif(cPrefixo == Nil, SE1->E1_PREFIXO, cPrefixo)
   cNum	  := Iif(cNum == Nil, SE1->E1_NUM, cNum)
-  cParcela := Iif(cParcela == Nil, SE1->E1_PARCELA, cParcela)
+  cParcela := Iif(cParcela == Nil, if(SE1->E1_PARCELA == Nil,"001",cParcela), cParcela)
   cCliente := Iif(cCliente == Nil, SE1->E1_CLIENTE, cCliente)
   cLoja	  := Iif(cLoja == Nil, SE1->E1_LOJA, cLoja)
 
